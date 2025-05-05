@@ -27,7 +27,11 @@
   display: flex;
   align-items: center;
 }
-
+#reset-stats-button{
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
 #reset-button {
   padding: 10px 20px;
   font-size: 16px;

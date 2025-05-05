@@ -14,6 +14,9 @@ let board
 let turn
 let winner
 let tie
+let xWins = 0
+let oWins = 0
+let ties = 0
 // X = ❌  https://emojipedia.org/cross-mark
 // O = ⭕  https://emojipedia.org/hollow-red-circle
 // '' = ❓  https://emojipedia.org/question-mark
@@ -21,8 +24,12 @@ let tie
 const squareEls = document.querySelectorAll('.sqr')
 const messageEl = document.getElementById('message')
 const resetBtn = document.getElementById('reset-button')
-console.log(squareEls)
-console.log(messageEl)
+const xCountEl = document.getElementById('x-count')
+const oCountEl = document.getElementById('o-count')
+const tieCountEl = document.getElementById('tie-count')
+const resetStatsBtn = document.getElementById('reset-stats-button')
+// console.log(squareEls)
+// console.log(messageEl)
 /*-------------------------------- Functions --------------------------------*/
 const placePiece=(index)=>{
     board[index] = turn
@@ -59,6 +66,7 @@ const checkForTie =()=>{
       ) {
         tie = true;
       }
+    //   console.log(tie)
 }
 const switchPlayerTurn =()=>{
     if (winner === true){
@@ -74,9 +82,7 @@ const switchPlayerTurn =()=>{
 const updateBoard = ()=>{
     board.forEach((box,index) => {
         squareEls[index].textContent = 
-            box === '❌' || 
-            box === '⭕' ? box : '❓'
-
+            box === '❌' || box === '⭕' ? box : '❓' // ? like if statment : otherwise
     })
 }
 const updateMessage = ()=>{
@@ -94,9 +100,23 @@ const render = ()=>{
     updateBoard()
     updateMessage()
     if (winner === true || tie === true) {
-        resetBtn.style.display = 'block';
+        resetBtn.style.display = 'block'
+        if (winner === true) {
+            if (turn === '❌') {
+                xWins += 1
+            }else {
+          oWins += 1
+        }
+      } else if (tie === true) {
+        ties += 1
       }
-}
+    }
+    xCountEl.textContent = `❌ Wins : ${xWins}`
+    oCountEl.textContent = `⭕ Wins : ${oWins}`
+    tieCountEl.textContent = `🤝 Ties : ${ties}`
+    }
+
+
 const init =()=>{
     board = [
         '','','',
@@ -122,12 +142,23 @@ const handleClick =(event)=>{
     switchPlayerTurn()
     render()
 }
-init()
+const playAgain =() => {
+    resetBtn.style.display = 'none'; 
+    init();
+  }
+const rstStatBtn =()=>{
+    xWins
+    oWins
+    ties
+    xCountEl.textContent = `❌ Wins : 0`
+    oCountEl.textContent = `⭕ Wins : 0`
+    tieCountEl.textContent = `🤝 Ties : 0`
+    console.log('Stats reset!')
+}
+init() // # this is important I forget to include it, feeling that  i didnt do any thing :)
 /*----------------------------- Event Listeners -----------------------------*/
 squareEls.forEach(square => {
     square.addEventListener('click', handleClick)
 })
-resetBtn.addEventListener('click', () => {
-    resetBtn.style.display = 'none'; 
-    init();
-  })
+resetBtn.addEventListener('click', playAgain)
+resetStatsBtn.addEventListener('click', rstStatBtn)
